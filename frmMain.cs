@@ -147,7 +147,6 @@ Source available: \tab https://github.com/wex/modplay\par
 
         private void lblSong_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"https://modarchive.org/index.php?request=view_by_moduleid&query={lblSong.Tag}");
             System.Diagnostics.Process.Start($"https://modarchive.org/index.php?request=view_by_moduleid&query={lblSong.Tag}");
         }
     }
