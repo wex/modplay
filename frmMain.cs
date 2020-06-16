@@ -2,13 +2,18 @@
 using System.Windows.Forms;
 using System.Net;
 using Un4seen.Bass;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Modplay
 {
     public partial class frmMain : Form
     {
+        List<string> favorites = new List<string>();
+
         int stream;
         int song = 1;
+        int favoriteIndex = 0;
         float _gainAmplification = 1;
         Random rand;
         BASSTimer _updateTimer;
@@ -26,6 +31,16 @@ namespace Modplay
 \pard\sa200\sl240\slmult1\tx1704 The Mod Archive\tab https://modarchive.org/\line BASS \tab https://www.un4seen.com/\line ZXTUNE \tab https://zxtune.bitbucket.io/\line BASSZXTUNE \tab https://sourceforge.net/projects/basszxtune/\par
 Source available: \tab https://github.com/wex/modplay\par
 }";
+
+            try
+            {
+                favorites.Clear();
+
+                foreach (String t in File.ReadAllLines(@"favorites.txt"))
+                {
+                    favorites.Add(t);
+                }
+            } catch (Exception) {}
 
             if (!Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_LATENCY, this.Handle))
             {
@@ -50,6 +65,16 @@ Source available: \tab https://github.com/wex/modplay\par
 
             Bass.BASS_Stop();
             Bass.BASS_Free();
+
+            using (TextWriter tw = new StreamWriter("favorites.txt", false))
+            {
+                favorites.ForEach(s =>
+                {
+                    tw.WriteLine(s);
+                });
+
+                tw.Close();
+            }
         }
 
         private void SetVolume(int v, int max)
@@ -73,12 +98,41 @@ Source available: \tab https://github.com/wex/modplay\par
             }
         }
 
+        private void addFavorite(int id)
+        {
+            favorites.Add($"{id}");
+        }
+
+        private void removeFavorite(int id)
+        {
+            favorites.Remove($"{id}");
+        }
+
+        private bool isFavorited(int id)
+        {
+            return (favorites.IndexOf($"{id}") >= 0);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             _updateTimer.Stop();
             Bass.BASS_StreamFree(stream);
 
-            song = rand.Next(1, 189357);
+            if (favorites.Count > 0 && playFavorites.Checked)
+            {
+                song = int.Parse(favorites[favoriteIndex]);
+                favoriteIndex++;
+
+                if (favoriteIndex >= favorites.Count)
+                {
+                    favoriteIndex = 0;
+                }
+            } else
+            {
+                song = rand.Next(1, 189357);
+            }
+
+            isFavorite.Checked = isFavorited(song);
 
             using (var client = new WebClient())
             {
@@ -148,6 +202,31 @@ Source available: \tab https://github.com/wex/modplay\par
         private void lblSong_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start($"https://modarchive.org/index.php?request=view_by_moduleid&query={lblSong.Tag}");
+        }
+
+        private void isFavorite_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!isFavorite.Checked)
+            {
+                isFavorite.Text = "Star";
+                removeFavorite(song);
+            } else
+            {
+                isFavorite.Text = "Unstar";
+                addFavorite(song);
+            }
+
+        }
+
+        private void playFavorites_CheckedChanged(object sender, EventArgs e)
+        {
+            if (playFavorites.Checked)
+            {
+                playFavorites.Text = "Starred";
+            } else
+            {
+                playFavorites.Text = "Randomize";
+            }
         }
     }
 }

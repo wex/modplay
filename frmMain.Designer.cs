@@ -33,12 +33,14 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.barProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.lblProgress = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblSong = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblLink = new System.Windows.Forms.ToolStripStatusLabel();
             this.trackVolume = new System.Windows.Forms.TrackBar();
             this.btnExit = new System.Windows.Forms.Button();
             this.lblVolume = new System.Windows.Forms.Label();
             this.txtAbout = new System.Windows.Forms.RichTextBox();
-            this.lblSong = new System.Windows.Forms.ToolStripStatusLabel();
+            this.isFavorite = new System.Windows.Forms.CheckBox();
+            this.playFavorites = new System.Windows.Forms.CheckBox();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackVolume)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +49,7 @@
             // 
             this.btnPlay.Location = new System.Drawing.Point(12, 12);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(87, 38);
+            this.btnPlay.Size = new System.Drawing.Size(87, 28);
             this.btnPlay.TabIndex = 0;
             this.btnPlay.Text = "Play/Next";
             this.btnPlay.UseVisualStyleBackColor = true;
@@ -78,6 +80,15 @@
             this.lblProgress.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.lblProgress.Size = new System.Drawing.Size(10, 17);
             // 
+            // lblSong
+            // 
+            this.lblSong.IsLink = true;
+            this.lblSong.Name = "lblSong";
+            this.lblSong.Size = new System.Drawing.Size(292, 17);
+            this.lblSong.Spring = true;
+            this.lblSong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSong.Click += new System.EventHandler(this.lblSong_Click);
+            // 
             // lblLink
             // 
             this.lblLink.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -105,9 +116,9 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(12, 107);
+            this.btnExit.Location = new System.Drawing.Point(12, 117);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(87, 38);
+            this.btnExit.Size = new System.Drawing.Size(87, 28);
             this.btnExit.TabIndex = 7;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -117,7 +128,7 @@
             // 
             this.lblVolume.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblVolume.AutoSize = true;
-            this.lblVolume.Location = new System.Drawing.Point(67, 72);
+            this.lblVolume.Location = new System.Drawing.Point(67, 71);
             this.lblVolume.Name = "lblVolume";
             this.lblVolume.Size = new System.Drawing.Size(32, 13);
             this.lblVolume.TabIndex = 8;
@@ -138,20 +149,37 @@
             this.txtAbout.Text = "";
             this.txtAbout.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.txtAbout_LinkClicked);
             // 
-            // lblSong
+            // isFavorite
             // 
-            this.lblSong.IsLink = true;
-            this.lblSong.Name = "lblSong";
-            this.lblSong.Size = new System.Drawing.Size(292, 17);
-            this.lblSong.Spring = true;
-            this.lblSong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblSong.Click += new System.EventHandler(this.lblSong_Click);
+            this.isFavorite.Appearance = System.Windows.Forms.Appearance.Button;
+            this.isFavorite.Location = new System.Drawing.Point(12, 43);
+            this.isFavorite.Name = "isFavorite";
+            this.isFavorite.Size = new System.Drawing.Size(87, 25);
+            this.isFavorite.TabIndex = 10;
+            this.isFavorite.Text = "Star";
+            this.isFavorite.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.isFavorite.UseVisualStyleBackColor = true;
+            this.isFavorite.CheckedChanged += new System.EventHandler(this.isFavorite_CheckedChanged);
+            // 
+            // playFavorites
+            // 
+            this.playFavorites.Appearance = System.Windows.Forms.Appearance.Button;
+            this.playFavorites.Location = new System.Drawing.Point(12, 87);
+            this.playFavorites.Name = "playFavorites";
+            this.playFavorites.Size = new System.Drawing.Size(87, 28);
+            this.playFavorites.TabIndex = 11;
+            this.playFavorites.Text = "Randomize";
+            this.playFavorites.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.playFavorites.UseVisualStyleBackColor = true;
+            this.playFavorites.CheckedChanged += new System.EventHandler(this.playFavorites_CheckedChanged);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 177);
+            this.Controls.Add(this.playFavorites);
+            this.Controls.Add(this.isFavorite);
             this.Controls.Add(this.txtAbout);
             this.Controls.Add(this.lblVolume);
             this.Controls.Add(this.btnExit);
@@ -187,6 +215,8 @@
         private System.Windows.Forms.Label lblVolume;
         private System.Windows.Forms.RichTextBox txtAbout;
         private System.Windows.Forms.ToolStripStatusLabel lblSong;
+        private System.Windows.Forms.CheckBox isFavorite;
+        private System.Windows.Forms.CheckBox playFavorites;
     }
 }
 
